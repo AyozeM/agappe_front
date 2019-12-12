@@ -1,11 +1,18 @@
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@import "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css";
+
 body {
-  margin: 0;
-  font-family: 'roboto';
-  -webkit-font-smoothing: antialiased;
+  margin                 : 0;
+  font-family            : 'roboto';
+  -webkit-font-smoothing : antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --heart-color: tomato;
 }

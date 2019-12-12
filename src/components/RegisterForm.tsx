@@ -1,38 +1,24 @@
-import TextField from "@material-ui/core/TextField";
-import { DatePicker } from "@material-ui/pickers";
-import moment from 'moment';
 import React, { useState } from 'react';
-import Rating from '@material-ui/lab/Rating'
+import { Subject } from "rxjs";
 import './RegisterForm.css';
-import { Typography, Button } from "@material-ui/core";
+export const RegisterForm = ({ subject }: { subject: Subject<any> }) => {
+  const [date, setDateChange] = useState(new Date().toISOString().substr(0, 10));
+  const [author, setAuthor] = useState('');
+  const [title, setTitle] = useState('');
+  const [score, setScore] = useState(0);
 
-export const RegisterForm = () => {
-  const today = moment();
-  const [selectedDate, setDateChange] = useState(today);
-  const handleDateChange = (date: any) => {
-    setDateChange(date);
+
+  const create = async () => {
+    const agappe = { date: new Date(date).toISOString(), author, title, score };
+    subject.next(agappe);
   }
   return (
-    <div className="form">
-      <div className="input">
-        <TextField id="author" label="Autor"></TextField>
-      </div>
-      <div className="input">
-        <TextField id="title" label="Título"></TextField>
-      </div>
-      <div className="input">
-        <DatePicker
-          label="Fecha"
-          value={selectedDate}
-          onChange={handleDateChange}
-          animateYearScrolling
-        />
-      </div>
-      <div className="rating">
-        <Typography component="legend" color="textSecondary" className="rate_label">Puntuación</Typography>
-        <Rating value={2}></Rating>
-      </div>
-      <Button variant="contained" color="primary" className="add_button">Añadir</Button>
+    <div>
+      <input type="text" defaultValue={author} required placeholder="Autor" onChange={e => setAuthor(e.target.value)} />
+      <input type="text" defaultValue={title} required placeholder="Titulo" onChange={e => setTitle(e.target.value)} />
+      <input type="date" defaultValue={date} required placeholder="Fecha" onChangeCapture={e => setDateChange((e.target as HTMLInputElement).value)} />
+      <input type="number" defaultValue={score} required placeholder="Puntuacion" onChange={e => setScore(+e.target.value)} min="1" max="5" />
+      <button onClick={create} className="waves-effect waves-light btn">crear</button>
     </div>
   );
 };

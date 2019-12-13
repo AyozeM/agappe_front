@@ -4,26 +4,27 @@ import './App.css';
 import { Card } from "./components/card";
 import { Modal } from "./components/Modal";
 import { RegisterForm } from "./components/RegisterForm";
-import { BackService, getInstance as GetBackInstance } from "./services/back.service";
-import { getInstance as GetModalInstance, ModalService } from "./services/Modal.service";
+import { BackService } from "./services/back.service";
+import { ModalService } from "./services/Modal.service";
 
 // Get active service
-const backService: BackService = GetBackInstance();
-const modalService: ModalService = GetModalInstance();
+const backService: BackService = BackService.create();
+const modalService: ModalService = ModalService.create();
 
 const styles = {
   list: {
     display: 'grid',
     gridTemplateColumns: 'repeat(3,1fr)',
+    gridAutoRows: 'minmax(100px, auto)',
     gap: '1em',
-    gridTemplateRows: 'minmax(50px)'
+    padding: '1%'
   },
   empty: {
     border: '1px dashed',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'lightgray',
+    color: 'var(--add-button-default, lightgray)',
     cursor: 'pointer',
     alignSelf: 'strech'
   }
@@ -32,7 +33,6 @@ const styles = {
 const App: React.FC = () => {
 
   const [agappeList, setAgappeList] = useState([] as any[]);
-  const [viewModal, setViewModal] = useState(false);
   backService.eventEmiter$.subscribe((list: any[]) => setAgappeList([...list]));
   const toSend: Subject<any> = new Subject();
   toSend.asObservable().subscribe(e => {
@@ -49,8 +49,8 @@ const App: React.FC = () => {
   return (
     <div>
       <Modal></Modal>
+      <h1 className="mainTitle">Agappes</h1>
       <section>
-        <h1>Agappes</h1>
       </section>
       <section style={styles.list}>
         {
@@ -58,7 +58,13 @@ const App: React.FC = () => {
             <Card data={e} key={i}></Card>
           ))
         }
-        <div className="card" style={styles.empty} onClick={createAgappe}>
+        <div className="card"
+          style={styles.empty}
+          onClick={createAgappe}
+          onMouseEnter={({ target }) => (target as HTMLElement).style.color = 'var(--add-button-active,gray)'}
+          onMouseLeave={({ target }) => (target as HTMLElement).style.color = styles.empty.color}
+        >
+          <span>Añadir agappe</span>
           <i className="material-icons">add</i>
         </div>
       </section>

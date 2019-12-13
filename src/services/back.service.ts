@@ -1,17 +1,8 @@
 import axios from 'axios';
 import { Observable, Subject } from "rxjs";
 import env from '../config/environments';
-let instance: BackService;
 
-/**
- * Get active or create new instance of service
- */
-export const getInstance = () => {
-  if (!instance) {
-    instance = new BackService();
-  }
-  return instance;
-}
+let instance: BackService;
 
 /**
  * Manage data with server
@@ -64,5 +55,15 @@ export class BackService {
    */
   private updateData() {
     this._eventEmiter$.next(this.agappeList);
+  }
+
+  /**
+   * Crete or get instance of service
+   */
+  static create() {
+    if (!instance) {
+      instance = new BackService();
+    }
+    return instance;
   }
 }

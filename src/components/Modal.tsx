@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ModalService, getInstance } from "../services/Modal.service";
+import { ModalService } from "../services/Modal.service";
 
-const modalService: ModalService = getInstance();
+const modalService: ModalService = ModalService.create();
 const styles = {
   closeButton: {
     display: 'flex',

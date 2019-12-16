@@ -1,4 +1,4 @@
-export interface AgappeI {
+export class AgappeI {
   title: string;
   author: string;
   date: Date;

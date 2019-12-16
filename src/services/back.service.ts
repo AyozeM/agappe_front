@@ -1,23 +1,25 @@
 import axios from 'axios';
 import { Observable, Subject } from "rxjs";
 import env from '../config/environments';
+import { AgappeI } from '../models/Agappe';
 
 let instance: BackService;
 
 /**
  * Manage data with server
+ * @author Ayoze Martín Hernández
  */
 export class BackService {
 
   /**
    * updated list of agappes
    */
-  private agappeList: any[] = [];
+  private agappeList: AgappeI[] = [];
 
   /**
    * Emit updated list on changes
    */
-  private _eventEmiter$: Subject<any[]> = new Subject<any[]>();
+  private _eventEmiter$: Subject<AgappeI[]> = new Subject<AgappeI[]>();
 
   constructor() {
     this.getAgappes();
@@ -27,7 +29,7 @@ export class BackService {
    * Expose observable of agappe list
    * @returns agappe list observable
    */
-  public get eventEmiter$(): Observable<any[]> {
+  public get eventEmiter$(): Observable<AgappeI[]> {
     return this._eventEmiter$.asObservable();
   }
 
@@ -44,8 +46,8 @@ export class BackService {
    * Add new agappe
    * @param toInsert new agappe data
    */
-  async addAgappe(toInsert: any): Promise<any> {
-    const added: any = (await axios.post(`${env.back_uri}/agappe/add`, toInsert)).data;
+  async addAgappe(toInsert: AgappeI): Promise<any> {
+    const added: AgappeI = (await axios.post(`${env.back_uri}/agappe/add`, toInsert)).data;
     this.agappeList.push(added);
     this.updateData();
   }
@@ -53,14 +55,15 @@ export class BackService {
   /**
    * Launch updated list
    */
-  private updateData() {
+  private updateData(): void {
     this._eventEmiter$.next(this.agappeList);
   }
 
   /**
    * Crete or get instance of service
+   * @returns service instance
    */
-  static create() {
+  static create(): BackService {
     if (!instance) {
       instance = new BackService();
     }
